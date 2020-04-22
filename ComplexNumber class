@@ -1,0 +1,56 @@
+import math
+class ComplexNumber:
+    def __init__(self, real = 0, imag = 0):
+        if type(real) is str or  type(imag) is str:
+            if type(real) is str and type(imag) is str:
+                raise ValueError("Invalid value for real and imaginary part")
+            elif type(real) is str:
+                raise ValueError("Invalid value for real part")
+            elif type(imag) is str:
+                raise ValueError("Invalid value for imaginary part")
+            
+        self._real_part = real
+        self._imaginary_part = imag
+        
+    @property
+    def real_part(self):
+        return self._real_part
+    @property 
+    def imaginary_part(self):
+        return self._imaginary_part
+    def __str__(self):
+        if self._imaginary_part>=0:
+            return "{}+{}i".format(self._real_part,self._imaginary_part)
+        else:
+            return "{}{}i".format(self._real_part,self._imaginary_part)
+    
+    def conjugate(self):
+        if self._imaginary_part <0:
+            real_a = self._imaginary_part * -1
+        else:
+            real_a = self._imaginary_part * -1
+        return ComplexNumber(self._real_part, real_a)
+        
+    def __add__(self, other):
+        return ComplexNumber(self._real_part + other._real_part,self._imaginary_part + other._imaginary_part)
+    
+    def __sub__(self, other):
+        return ComplexNumber(self._real_part - other._real_part,
+                       self._imaginary_part - other._imaginary_part)
+    
+    def __mul__(self, other):
+        return ComplexNumber(self._real_part*other._real_part - self._imaginary_part*other._imaginary_part,self._imaginary_part*other._real_part + self._real_part*other._imaginary_part)
+
+    def __truediv__(self, other):
+        if other._real_part == 0 and other._imaginary_part == 0:
+            raise ZeroDivisionError("division by zero")
+        else:
+            sr, si, os, oi = self._real_part, self._imaginary_part,other._real_part, other._imaginary_part 
+            r = float(os**2 + oi**2)
+            return ComplexNumber((sr*os+si*oi)/r, (si*os-sr*oi)/r)
+    
+    def __abs__(self):
+        return round(math.sqrt(self._real_part**2 + self._imaginary_part**2),3)
+    
+    def __eq__(self, other):
+        return self._real_part == other._real_part and self._imaginary_part == other._imaginary_part
