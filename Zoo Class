@@ -1,0 +1,146 @@
+class Deer:
+    def __init__(self,age_in_months, breed, required_food_in_kgs):
+        if age_in_months != 1:
+            raise ValueError("Invalid value for field age_in_months: {}".format(age_in_months))
+        if required_food_in_kgs <= 0:
+            raise ValueError("Invalid value for field required_food_in_kgs: {}".format(required_food_in_kgs))
+        self._age_in_months = age_in_months
+        self._breed = breed
+        self._required_food_in_kgs = required_food_in_kgs
+        
+    @property 
+    def age_in_months(self):
+        return self._age_in_months
+        
+    @property
+    def breed(self):
+        return self._breed
+        
+    @property
+    def required_food_in_kgs(self):
+        return self._required_food_in_kgs
+    
+    def grow(self):
+        self._age_in_months += 1
+        self._required_food_in_kgs += 2
+    @classmethod
+    def make_sound(cls):
+        print("Buck Buck")
+    @classmethod
+    def breathe(cls):
+        print("Breathe in air")
+
+class Lion(Deer):
+    def __init__(self,age_in_months, breed, required_food_in_kgs):
+        super().__init__(age_in_months,breed,required_food_in_kgs)
+    def grow(self):
+        self._age_in_months += 1
+        self._required_food_in_kgs += 4
+    @classmethod
+    def make_sound(cls):
+        print("Roar Roar")
+    @classmethod
+    def breathe(cls):
+        print("Breathe in air")
+    def hunt(self,zoo_object):
+        count_of_deers = 0
+        for animal in zoo_object.animals_list:
+            if animal.__class__ == Deer:
+                count_of_deers +=1
+                zoo_object.animals_list.remove(animal)
+        if count_of_deers == 0:
+            print("No deers to hunt")
+        
+class Shark(Deer):
+    def __init__(self,age_in_months, breed, required_food_in_kgs):
+        super().__init__(age_in_months,breed,required_food_in_kgs)
+    
+    def grow(self):
+        self._age_in_months += 1
+        self._required_food_in_kgs += 8
+    @classmethod
+    def make_sound(cls):
+        print("Shark Sound")
+    @classmethod
+    def breathe(cls):
+        print("Breathe oxygen from water")
+    def hunt(self,zoo_object):
+        count_of_deers = 0
+        for animal in zoo_object.animals_list:
+            if animal.__class__ == GoldFish:
+                count_of_deers +=1
+                zoo_object.animals_list.remove(animal)
+        if count_of_deers == 0:
+            print("No GoldFish to hunt")
+    
+class GoldFish(Deer):
+    def __init__(self,age_in_months, breed, required_food_in_kgs):
+        super().__init__(age_in_months,breed,required_food_in_kgs)
+    
+    def grow(self):
+        self._age_in_months += 1
+        self._required_food_in_kgs += 0.2
+    @classmethod
+    def make_sound(cls):
+        print("Hum Hum")
+    @classmethod
+    def breathe(cls):
+        print("Breathe oxygen from water")
+
+class Snake(Deer):
+    def __init__(self,age_in_months, breed, required_food_in_kgs):
+        super().__init__(age_in_months,breed,required_food_in_kgs)
+    
+    def grow(self):
+        self._age_in_months += 1
+        self._required_food_in_kgs += 0.5
+    @classmethod
+    def make_sound(cls):
+        print("Hiss Hiss")
+    @classmethod
+    def breathe(cls):
+        print("Breathe in air")
+        
+    def hunt(self,zoo_object):
+        count_of_deers = 0
+        for animal in zoo_object.animals_list:
+            if animal.__class__ == Deer:
+                count_of_deers +=1
+                zoo_object.animals_list.remove(animal)
+        if count_of_deers == 0:
+            print("No deers to hunt")
+    
+class Zoo:
+    total_animals_in_all_zoos = []
+    def __init__(self):
+        self.animals_list = []
+        self._reserved_food_in_kgs = 0
+    @property 
+    def reserved_food_in_kgs(self):
+        return self._reserved_food_in_kgs
+    
+    def add_food_to_reserve(self,reserve):
+        self._reserved_food_in_kgs +=reserve
+    
+    def add_animal(self,animal):
+        self.animals_list.append(animal)
+        self.total_animals_in_all_zoos.append(animal)
+        
+    def count_animals(self):
+        return len(self.animals_list)
+    
+    def feed(self,zoo_animal):
+        if self._reserved_food_in_kgs > 0 : #self.reserved_food_in_kgs + zoo_animal.required_food_in_kgs <= self.reserved_food_in_kgs:
+            self._reserved_food_in_kgs -= zoo_animal.required_food_in_kgs
+            zoo_animal.grow()
+        
+    @staticmethod
+    def count_animals_in_given_zoos(zoos_animals):
+        count = 0
+        for animal in zoos_animals:
+            count += animal.count_animals()
+        return count
+    
+    @classmethod
+    def count_animals_in_all_zoos(cls):
+        return len(cls.total_animals_in_all_zoos)
